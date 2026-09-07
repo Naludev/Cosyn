@@ -1,0 +1,24 @@
+kind = "mobile"
+previewPath = "/cosyn-mobile/"
+title = "Cosyn Mobile"
+description = "A native Android and iOS companion for Cosyn, helping convention fans discover events, plan cosplay, connect with attendees, join chats, and organize community meetups."
+version = "1.0.0"
+id = "artifacts/cosyn-mobile"
+router = "expo-domain"
+
+[[services]]
+name = "expo"
+ensurePreviewReachable = "/status"
+paths = [ "/cosyn-mobile/" ]
+localPort = 19500
+
+[services.development]
+run = "pnpm --filter @workspace/cosyn-mobile run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/cosyn-mobile", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/cosyn-mobile", "run", "serve" ]
+
+[services.env]
+PORT = "19500"
+BASE_PATH = "/cosyn-mobile/"
