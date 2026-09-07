@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Cosyn"
+description = "A mobile-first social platform for convention, cosplay, anime, gaming, comic, fantasy, movie, and fan communities. Users discover conventions, share cosplay plans, see attendees, join event chats, organize meetups, and connect with fellow fans."
+version = "1.0.0"
+id = "artifacts/cosyn"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19985
+
+[services.development]
+run = "pnpm --filter @workspace/cosyn run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/cosyn", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/cosyn/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19985"
+BASE_PATH = "/"

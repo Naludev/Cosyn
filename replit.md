@@ -1,6 +1,6 @@
-# [Project name]
+# Cosyn
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Cosyn is a mobile-first convention community where fans discover events, plan cosplay, meet attendees, and join event-specific conversations.
 
 ## Run & Operate
 
@@ -22,15 +22,20 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/cosyn` — responsive React/Vite app and primary product UI.
+- `artifacts/api-server/src/routes/cosyn.ts` — convention, attendance, feed, chat, group, and photoshoot API routes.
+- `lib/api-spec/openapi.yaml` — source of truth for the generated API client and Zod schemas.
+- `lib/db/src/schema/cosyn.ts` — Drizzle schema for Cosyn user, event, social, and community relationships.
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The first release uses a mobile-first responsive web app so it is immediately usable on phones and desktop without maintaining two separate clients.
+- Clerk owns authentication and browser sessions; the API uses Clerk middleware while preserving a demo seed user for public preview browsing.
+- API contracts are OpenAPI-first and generated into the shared React Query client and Zod validation package.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+The current build includes public discovery, convention search and creation, event detail pages, attendance with cosplay plans, attendee lists, feed posts and likes, convention chats, cosplay groups, photoshoot planning, profiles, and branded Clerk sign-in/sign-up routes.
 
 ## User preferences
 
@@ -38,7 +43,8 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Restart the API workflow after changing route or middleware code; it is bundled with esbuild before serving.
+- Use the generated API hooks and query-key helpers rather than hand-written fetch calls in the frontend.
 
 ## Pointers
 

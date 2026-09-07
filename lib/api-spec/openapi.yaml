@@ -10,6 +10,16 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: dashboard
+    description: Home dashboard and discovery
+  - name: conventions
+    description: Convention discovery and attendance
+  - name: feed
+    description: Community posts and reactions
+  - name: chats
+    description: Convention community conversations
+  - name: community
+    description: Cosplay groups and photoshoots
 paths:
   /healthz:
     get:
@@ -24,6 +34,293 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get the home dashboard
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+  /conventions:
+    get:
+      operationId: listConventions
+      tags: [conventions]
+      summary: Search and filter conventions
+      parameters:
+        - name: search
+          in: query
+          schema: { type: string }
+        - name: country
+          in: query
+          schema: { type: string }
+        - name: city
+          in: query
+          schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: date
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Matching conventions
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Convention" }
+    post:
+      operationId: createConvention
+      tags: [conventions]
+      summary: Create a convention
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ConventionInput" }
+      responses:
+        "201":
+          description: Created convention
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Convention" }
+  /conventions/{id}:
+    get:
+      operationId: getConvention
+      tags: [conventions]
+      summary: Get a convention
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Convention detail
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ConventionDetail" }
+        "404": { description: Not found }
+  /conventions/{id}/attendees:
+    get:
+      operationId: listAttendees
+      tags: [conventions]
+      summary: List convention attendees
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Attendees
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Attendee" }
+  /conventions/{id}/attendance:
+    post:
+      operationId: markAttendance
+      tags: [conventions]
+      summary: Mark the current user as going
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/AttendanceInput" }
+      responses:
+        "201":
+          description: Attendance record
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Attendee" }
+  /feed:
+    get:
+      operationId: listFeed
+      tags: [feed]
+      summary: Get the community feed
+      responses:
+        "200":
+          description: Feed posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Post" }
+    post:
+      operationId: createPost
+      tags: [feed]
+      summary: Create a community post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PostInput" }
+      responses:
+        "201":
+          description: Created post
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Post" }
+  /feed/{id}/like:
+    post:
+      operationId: togglePostLike
+      tags: [feed]
+      summary: Like or unlike a post
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Updated post
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Post" }
+  /chats:
+    get:
+      operationId: listChats
+      tags: [chats]
+      summary: List accessible convention chats
+      responses:
+        "200":
+          description: Chats
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Chat" }
+  /chats/{id}/messages:
+    get:
+      operationId: listMessages
+      tags: [chats]
+      summary: List chat messages
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Message" }
+    post:
+      operationId: createMessage
+      tags: [chats]
+      summary: Send a chat message
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/MessageInput" }
+      responses:
+        "201":
+          description: Message
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Message" }
+  /groups:
+    get:
+      operationId: listGroups
+      tags: [community]
+      summary: List cosplay groups
+      parameters:
+        - name: conventionId
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/CosplayGroup" }
+    post:
+      operationId: createGroup
+      tags: [community]
+      summary: Create a cosplay group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/GroupInput" }
+      responses:
+        "201":
+          description: Group
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CosplayGroup" }
+  /groups/{id}/join:
+    post:
+      operationId: joinGroup
+      tags: [community]
+      summary: Join a cosplay group
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Group
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CosplayGroup" }
+  /photoshoots:
+    get:
+      operationId: listPhotoshoots
+      tags: [community]
+      summary: List photoshoots
+      parameters:
+        - name: conventionId
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Photoshoots
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Photoshoot" }
+    post:
+      operationId: createPhotoshoot
+      tags: [community]
+      summary: Create a photoshoot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PhotoshootInput" }
+      responses:
+        "201":
+          description: Photoshoot
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Photoshoot" }
 components:
   schemas:
     HealthStatus:
@@ -33,4 +330,188 @@ components:
           type: string
       required:
         - status
+    User:
+      type: object
+      required: [id, username, avatarUrl, bio, country, friendsCount, conventionsAttended, cosplayPosts]
+      properties:
+        id: { type: integer }
+        username: { type: string }
+        avatarUrl: { type: string }
+        bio: { type: string }
+        country: { type: string }
+        friendsCount: { type: integer }
+        conventionsAttended: { type: integer }
+        cosplayPosts: { type: integer }
+    Convention:
+      type: object
+      required: [id, name, country, city, venue, address, startDate, endDate, description, bannerUrl, category, organizer, attendeeCount]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        country: { type: string }
+        city: { type: string }
+        venue: { type: string }
+        address: { type: string }
+        startDate: { type: string }
+        endDate: { type: string }
+        description: { type: string }
+        bannerUrl: { type: string }
+        websiteUrl: { type: ["string", "null"] }
+        ticketUrl: { type: ["string", "null"] }
+        category: { type: string }
+        organizer: { type: string }
+        attendeeCount: { type: integer }
+        isAttending: { type: boolean }
+    ConventionInput:
+      type: object
+      required: [name, country, city, venue, address, startDate, endDate, description, bannerUrl, category]
+      properties:
+        name: { type: string }
+        country: { type: string }
+        city: { type: string }
+        venue: { type: string }
+        address: { type: string }
+        startDate: { type: string }
+        endDate: { type: string }
+        description: { type: string }
+        bannerUrl: { type: string }
+        websiteUrl: { type: string }
+        ticketUrl: { type: string }
+        category: { type: string }
+    Dashboard:
+      type: object
+      required: [user, trending, featured, upcoming, feed]
+      properties:
+        user: { $ref: "#/components/schemas/User" }
+        trending:
+          type: array
+          items: { $ref: "#/components/schemas/Convention" }
+        featured:
+          type: array
+          items: { $ref: "#/components/schemas/Convention" }
+        upcoming:
+          type: array
+          items: { $ref: "#/components/schemas/Convention" }
+        feed:
+          type: array
+          items: { $ref: "#/components/schemas/Post" }
+    ConventionDetail:
+      allOf:
+        - $ref: "#/components/schemas/Convention"
+        - type: object
+          required: [chat, groups, photoshoots]
+          properties:
+            chat: { $ref: "#/components/schemas/Chat" }
+            groups:
+              type: array
+              items: { $ref: "#/components/schemas/CosplayGroup" }
+            photoshoots:
+              type: array
+              items: { $ref: "#/components/schemas/Photoshoot" }
+    AttendanceInput:
+      type: object
+      properties:
+        cosplayCharacter: { type: string }
+        fandom: { type: string }
+        cosplayProgress: { type: string }
+        cosplayPictureUrl: { type: string }
+    Attendee:
+      type: object
+      required: [id, username, avatarUrl, cosplayCharacter, fandom, progress]
+      properties:
+        id: { type: integer }
+        username: { type: string }
+        avatarUrl: { type: string }
+        cosplayCharacter: { type: string }
+        fandom: { type: string }
+        progress: { type: string }
+    Post:
+      type: object
+      required: [id, author, body, imageUrl, createdAt, likes, comments, likedByMe]
+      properties:
+        id: { type: integer }
+        author: { $ref: "#/components/schemas/User" }
+        body: { type: string }
+        imageUrl: { type: ["string", "null"] }
+        createdAt: { type: string }
+        likes: { type: integer }
+        comments: { type: integer }
+        likedByMe: { type: boolean }
+    PostInput:
+      type: object
+      required: [body]
+      properties:
+        body: { type: string }
+        imageUrl: { type: string }
+    Chat:
+      type: object
+      required: [id, conventionId, name, lastMessage, unreadCount, memberCount]
+      properties:
+        id: { type: integer }
+        conventionId: { type: integer }
+        name: { type: string }
+        lastMessage: { type: string }
+        unreadCount: { type: integer }
+        memberCount: { type: integer }
+    Message:
+      type: object
+      required: [id, chatId, author, body, createdAt, reactions]
+      properties:
+        id: { type: integer }
+        chatId: { type: integer }
+        author: { $ref: "#/components/schemas/User" }
+        body: { type: string }
+        createdAt: { type: string }
+        reactions: { type: integer }
+    MessageInput:
+      type: object
+      required: [body]
+      properties:
+        body: { type: string }
+    CosplayGroup:
+      type: object
+      required: [id, conventionId, name, description, characters, meetingPlace, meetingTime, memberCount, joined]
+      properties:
+        id: { type: integer }
+        conventionId: { type: integer }
+        name: { type: string }
+        description: { type: string }
+        characters: { type: string }
+        meetingPlace: { type: string }
+        meetingTime: { type: string }
+        memberCount: { type: integer }
+        joined: { type: boolean }
+    GroupInput:
+      type: object
+      required: [conventionId, name, description, characters, meetingPlace, meetingTime]
+      properties:
+        conventionId: { type: integer }
+        name: { type: string }
+        description: { type: string }
+        characters: { type: string }
+        meetingPlace: { type: string }
+        meetingTime: { type: string }
+    Photoshoot:
+      type: object
+      required: [id, conventionId, title, date, time, location, description, rsvpCount, joined]
+      properties:
+        id: { type: integer }
+        conventionId: { type: integer }
+        title: { type: string }
+        date: { type: string }
+        time: { type: string }
+        location: { type: string }
+        description: { type: string }
+        rsvpCount: { type: integer }
+        joined: { type: boolean }
+    PhotoshootInput:
+      type: object
+      required: [conventionId, title, date, time, location, description]
+      properties:
+        conventionId: { type: integer }
+        title: { type: string }
+        date: { type: string }
+        time: { type: string }
+        location: { type: string }
+        description: { type: string }
 

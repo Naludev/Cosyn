@@ -1,0 +1,1 @@
+- [OpenAPI generator naming collisions](api-codegen-collision.md) — path and query parameters can collide in generated Zod exports; check the libs typecheck after spec changes.

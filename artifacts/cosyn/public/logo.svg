@@ -1,0 +1,6 @@
+<svg width="160" height="48" viewBox="0 0 160 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="48" height="48" rx="14" fill="#9A91FF"/>
+  <path d="M24 12.5L26.75 20.25L34.5 23L26.75 25.75L24 33.5L21.25 25.75L13.5 23L21.25 20.25L24 12.5Z" fill="#100E1D"/>
+  <path d="M35.5 12.5L36.5 15.5L39.5 16.5L36.5 17.5L35.5 20.5L34.5 17.5L31.5 16.5L34.5 15.5L35.5 12.5Z" fill="#100E1D"/>
+  <text x="60" y="32" fill="#F4F2FF" font-family="Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="-1">cosyn</text>
+</svg>
