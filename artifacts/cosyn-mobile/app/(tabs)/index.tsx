@@ -56,12 +56,19 @@ export default function OrbitScreen() {
           <View style={s.eyebrowRow}><View style={[s.liveDot, { backgroundColor: colors.pink }]} /><Text style={[s.eyebrow, { color: colors.cyan }]}>THE FANDOM SOCIAL LAYER</Text></View>
           <Text style={[s.heroTitle, { color: colors.foreground }]}>Your people are <Text style={{ color: colors.primary }}>already gathering.</Text></Text>
           <Text style={[s.heroBody, { color: colors.mutedForeground }]}>Convention plans, cosplay progress, and late-night fandom energy — all in one orbit.</Text>
-          <View style={s.heroActions}><PrimaryButton label="Explore conventions" icon="arrow-right" onPress={() => router.push('/explore')} /><Pressable onPress={() => router.push('/profile')} style={({ pressed }) => [s.profileLink, { borderColor: colors.border }, pressed && { opacity: 0.72 }]}><Text style={[s.profileLinkText, { color: colors.foreground }]}>My profile</Text></Pressable></View>
+          <View style={s.heroActions}><PrimaryButton label="Explore conventions" icon="arrow-right" onPress={() => router.push("/explore")}
+           /><Pressable onPress={() => router.push("/profile")}
+            style={({ pressed }) => [s.profileLink, { borderColor: colors.border }, pressed && { opacity: 0.72 }]}><Text style={[s.profileLinkText, { color: colors.foreground }]}>My profile</Text></Pressable></View>
         </View>
       </OrbitBackground>
 
       <View style={s.section}><SectionLabel action="See all">Your next signal</SectionLabel>
-        <Pressable onPress={() => router.push(`/event/${conventions[0].id}`)} style={({ pressed }) => [s.nextCard, { backgroundColor: colors.card, borderColor: colors.border }, pressed && { opacity: 0.82 }]}>
+        <Pressable onPress={() =>
+  router.push({
+    pathname: "/event/[id]",
+    params: { id: conventions[0].id },
+  })
+} style={({ pressed }) => [s.nextCard, { backgroundColor: colors.card, borderColor: colors.border }, pressed && { opacity: 0.82 }]}>
           <View style={s.nextTop}><View><Text style={[s.cardKicker, { color: colors.cyan }]}>UP NEXT · 182 DAYS</Text><Text style={[s.nextTitle, { color: colors.foreground }]}>Made in Asia</Text><View style={s.metaRow}><Feather name="map-pin" size={13} color={colors.mutedForeground} /><Text style={[s.meta, { color: colors.mutedForeground }]}>Brussels Expo · Brussels</Text></View></View><View style={[s.signalOrb, { backgroundColor: colors.secondary }]}><Feather name="radio" size={21} color={colors.primary} /></View></View>
           <View style={s.nextBottom}><View style={s.attendees}><View style={s.avatarStack}><Avatar initials="MM" size={26} accent="violet" /><Avatar initials="YF" size={26} accent="cyan" /><Avatar initials="+2" size={26} accent="pink" /></View><Text style={[s.meta, { color: colors.mutedForeground }]}>4 friends in orbit</Text></View><Pressable onPress={(event) => { event.stopPropagation(); toggleAttendance(); }} style={({ pressed }) => [s.goingButton, { backgroundColor: attending ? colors.success : colors.primary }, pressed && { opacity: 0.72 }]}><Feather name={attending ? 'check' : 'plus'} size={14} color={attending ? colors.ink : colors.primaryForeground} /><Text style={[s.goingText, { color: attending ? colors.ink : colors.primaryForeground }]}>{attending ? 'Going' : 'I’m going'}</Text></Pressable></View>
         </Pressable>

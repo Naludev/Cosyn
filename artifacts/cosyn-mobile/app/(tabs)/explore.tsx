@@ -24,7 +24,14 @@ export default function ExploreScreen() {
     <View style={[s.search, { backgroundColor: colors.card, borderColor: colors.border }]}><Feather name="search" size={18} color={colors.mutedForeground} /><TextInput value={search} onChangeText={setSearch} placeholder="City, convention, fandom..." placeholderTextColor={colors.mutedForeground} style={[s.searchInput, { color: colors.foreground }]} /></View>
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={s.filters}>{filters.map((item) => <Pressable key={item} onPress={() => setFilter(item)} style={[s.filter, { backgroundColor: filter === item ? colors.primary : colors.card, borderColor: filter === item ? colors.primary : colors.border }]}><Text style={[s.filterText, { color: filter === item ? colors.primaryForeground : colors.mutedForeground }]}>{item}</Text></Pressable>)}</ScrollView>
     <SectionLabel action={`${results.length} events`}>In your orbit</SectionLabel>
-    <View style={s.list}>{results.map((event) => <EventCard key={event.id} event={event} onPress={() => router.push(`/event/${event.id}`)} />)}</View>
+    <View style={s.list}>{results.map((event) => <EventCard
+  key={event.id}
+  event={event}
+  onPress={() => router.push({
+    pathname: "/event/[id]",
+    params: { id: event.id }
+  })}
+/>)}</View>
     {results.length === 0 && <View style={[s.empty, { borderColor: colors.border }]}><Feather name="compass" size={26} color={colors.primary} /><Text style={[s.emptyTitle, { color: colors.foreground }]}>No signals yet</Text><Text style={[s.emptyBody, { color: colors.mutedForeground }]}>Try another city or fandom.</Text></View>}
   </ScrollView>;
 }

@@ -12,9 +12,19 @@ export default function ChatsScreen() {
   const s = useMemo(() => makeStyles(colors), [colors]);
   return <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
     <View style={s.topBar}><View><Text style={[s.kicker, { color: colors.cyan }]}>COMMUNITY RADIO</Text><Text style={[s.title, { color: colors.foreground }]}>Chats</Text></View><IconButton icon="edit-3" label="New conversation" /></View>
-    <View style={[s.feature, { backgroundColor: colors.secondary, borderColor: colors.border }]}><View style={s.featureTop}><View style={[s.pulse, { backgroundColor: colors.pink }]} /><Text style={[s.featureKicker, { color: colors.secondaryForeground }]}>LIVE NOW</Text></View><Text style={[s.featureTitle, { color: colors.foreground }]}>Made in Asia 2027</Text><Text style={[s.featureBody, { color: colors.mutedForeground }]}>The fastest way to find your people before the doors open.</Text><Pressable onPress={() => router.push('/chat/mia')} style={({ pressed }) => [s.openChat, { backgroundColor: colors.primary }, pressed && { opacity: 0.7 }]}><Text style={[s.openChatText, { color: colors.primaryForeground }]}>Open live chat</Text><Feather name="arrow-up-right" size={16} color={colors.primaryForeground} /></Pressable></View>
+    <View style={[s.feature, { backgroundColor: colors.secondary, borderColor: colors.border }]}><View style={s.featureTop}><View style={[s.pulse, { backgroundColor: colors.pink }]} /><Text style={[s.featureKicker, { color: colors.secondaryForeground }]}>LIVE NOW</Text></View><Text style={[s.featureTitle, { color: colors.foreground }]}>Made in Asia 2027</Text><Text style={[s.featureBody, { color: colors.mutedForeground }]}>The fastest way to find your people before the doors open.</Text><Pressable onPress={() =>
+  router.push({
+    pathname: "/chat/[id]",
+    params: { id: "mia" },
+  })
+} style={({ pressed }) => [s.openChat, { backgroundColor: colors.primary }, pressed && { opacity: 0.7 }]}><Text style={[s.openChatText, { color: colors.primaryForeground }]}>Open live chat</Text><Feather name="arrow-up-right" size={16} color={colors.primaryForeground} /></Pressable></View>
     <SectionLabel action="3 active">Your channels</SectionLabel>
-    {chats.map((chat) => <Pressable key={chat.id} onPress={() => router.push(`/chat/${chat.id}`)} style={({ pressed }) => [s.chatRow, { backgroundColor: colors.card, borderColor: colors.border }, pressed && { opacity: 0.72 }]}><Avatar initials={chat.name.slice(0, 2).toUpperCase()} accent={chat.accent} /><View style={s.chatCopy}><Text style={[s.chatName, { color: colors.foreground }]}>{chat.name}</Text><Text style={[s.chatSubtitle, { color: colors.mutedForeground }]}>{chat.subtitle}</Text></View>{chat.unread > 0 && <View style={[s.unread, { backgroundColor: colors.pink }]}><Text style={[s.unreadText, { color: colors.ink }]}>{chat.unread}</Text></View>}<Feather name="chevron-right" size={17} color={colors.mutedForeground} /></Pressable>)}
+    {chats.map((chat) => <Pressable key={chat.id} onPress={() =>
+  router.push({
+    pathname: "/chat/[id]",
+    params: { id: chat.id },
+  })
+} style={({ pressed }) => [s.chatRow, { backgroundColor: colors.card, borderColor: colors.border }, pressed && { opacity: 0.72 }]}><Avatar initials={chat.name.slice(0, 2).toUpperCase()} accent={chat.accent} /><View style={s.chatCopy}><Text style={[s.chatName, { color: colors.foreground }]}>{chat.name}</Text><Text style={[s.chatSubtitle, { color: colors.mutedForeground }]}>{chat.subtitle}</Text></View>{chat.unread > 0 && <View style={[s.unread, { backgroundColor: colors.pink }]}><Text style={[s.unreadText, { color: colors.ink }]}>{chat.unread}</Text></View>}<Feather name="chevron-right" size={17} color={colors.mutedForeground} /></Pressable>)}
   </ScrollView>;
 }
 
